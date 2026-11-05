@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#180d08">
+  <title>إدارة سمورة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <a class="admin-brand" href="../index.html"><img src="../assets/logo.jpg" alt=""><span><b>سمورة</b><small>استوديو إدارة الموقع</small></span></a>
+    <div class="top-actions"><span class="local-status"><i></i> لوحة محلية</span><a class="admin-button ghost" href="../index.html" target="_blank" rel="noreferrer">معاينة الموقع ↗</a><button class="admin-button ghost" id="importTrigger">استيراد محتوى</button><button class="admin-button primary" id="exportTrigger">تصدير نسخة الموقع</button><input id="importFile" type="file" accept=".js,.json,application/json,text/javascript" hidden></div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-label">إدارة المطعم</div>
+      <button class="sidebar-link active" data-tab="overview"><span>▦</span> نظرة عامة</button>
+      <button class="sidebar-link" data-tab="products"><span>▣</span> المنتجات <b id="navProductCount">0</b></button>
+      <button class="sidebar-link" data-tab="categories"><span>◫</span> التصنيفات</button>
+      <button class="sidebar-link" data-tab="content"><span>✎</span> نصوص الموقع</button>
+      <button class="sidebar-link" data-tab="appearance"><span>◈</span> الهوية والمظهر</button>
+      <button class="sidebar-link" data-tab="media"><span>▶</span> الفيديوهات والرسائل</button>
+      <button class="sidebar-link" data-tab="contact"><span>⌖</span> التواصل والروابط</button>
+      <button class="sidebar-link" data-tab="publishing"><span>⇧</span> الحفظ والنشر</button>
+      <div class="sidebar-note"><span>⌑</span><b>إدارة محلية</b><p>التعديلات تُحفظ في المتصفح الحالي. صدّر ملف المحتوى لتطبيقها على نسخة الموقع.</p></div>
+    </aside>
+    <main class="admin-main">
+      <section class="admin-view active" id="view-overview">
+        <div class="page-heading"><div><span class="admin-kicker">مساحة العمل</span><h1>أهلاً بيك في إدارة سمورة</h1><p>حدّث محتوى الموقع ومنيو سمورة من مكان واحد.</p></div><span class="date-chip" id="today"></span></div>
+        <div class="admin-stats"><article><span>المنتجات</span><b id="statProducts">0</b><small>في المنيو والعروض</small></article><article><span>التصنيفات</span><b id="statCategories">0</b><small>أقسام القائمة</small></article><article><span>الفيديوهات</span><b id="statVideos">0</b><small>محتوى المطعم</small></article><article><span>آخر نسخة</span><b class="draft-state" id="draftState">جاهزة</b><small id="draftHint">حمّل أحدث ملف محتوى</small></article></div>
+        <div class="overview-grid"><section class="admin-card welcome-card"><span class="admin-kicker">مركز المحتوى</span><h2>كل تفاصيل موقعك<br><em>في مكان واحد</em></h2><p>عدّل المنتجات والأسعار، ونصوص الصفحات، والصور، والفيديوهات، ورسائل العملاء وبيانات التواصل.</p><div class="welcome-actions"><button class="admin-button primary" data-goto="products">إدارة المنتجات ←</button><button class="admin-button light" data-goto="content">تعديل نصوص الموقع</button></div><span class="welcome-flame">سمورة</span></section><section class="admin-card quick-card"><h3>خطوات النشر</h3><div class="quick-step"><b>١</b><span><strong>حدّث المحتوى</strong><small>تغييراتك تُحفظ كمسودة محلية</small></span></div><div class="quick-step"><b>٢</b><span><strong>صدّر نسخة الموقع</strong><small>ينزل ملف content.js جاهز للاستبدال</small></span></div><div class="quick-step"><b>٣</b><span><strong>استبدل الملف في المشروع</strong><small>ثم ارفع نسخة الموقع المحدّثة</small></span></div><button class="text-action" data-goto="publishing">شرح الحفظ والنشر ←</button></section></div>
+        <section class="admin-card recent-card"><div class="card-heading"><div><h3>أصناف المنيو</h3><p>معاينة سريعة للأصناف الحالية</p></div><button class="text-action" data-goto="products">فتح المنتجات ←</button></div><div id="overviewProducts" class="mini-product-grid"></div></section>
+      </section>
+      <section class="admin-view" id="view-products">
+        <div class="page-heading"><div><span class="admin-kicker">قائمة الطعام</span><h1>المنتجات والعروض</h1><p>عدّل أسماء الأصناف وأسعارها وصورها، وتحكم في ظهورها بالعروض والمنيو.</p></div><button class="admin-button primary" id="addProduct">＋ إضافة صنف</button></div>
+        <section class="admin-card list-card"><div class="list-tools"><input id="productSearch" class="admin-control" type="search" placeholder="ابحث باسم الصنف…"><select id="productCategoryFilter" class="admin-control"><option value="">كل التصنيفات</option></select><select id="productStatusFilter" class="admin-control"><option value="all">كل الحالات</option><option value="active">ظاهر بالموقع</option><option value="inactive">مخفي</option></select><span id="productResultCount"></span></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>الصورة</th><th>الصنف</th><th>القسم</th><th>السعر</th><th>العرض</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="productsBody"></tbody></table></div><div class="empty-result" id="productsEmpty" hidden>مافيش أصناف مطابقة للبحث.</div></section>
+      </section>
+      <section class="admin-view" id="view-categories">
+        <div class="page-heading"><div><span class="admin-kicker">تنظيم القائمة</span><h1>تصنيفات المنيو</h1><p>غيّر اسم القسم أو انقل أصنافه قبل حذفه.</p></div></div>
+        <section class="admin-card"><div id="categoriesList" class="category-list"></div><form id="addCategoryForm" class="inline-add"><input class="admin-control" name="category" maxlength="60" required placeholder="اسم التصنيف الجديد"><button class="admin-button primary">＋ إضافة تصنيف</button></form></section>
+      </section>
+      <section class="admin-view" id="view-content">
+        <div class="page-heading"><div><span class="admin-kicker">نصوص الصفحات</span><h1>محتوى الموقع</h1><p>عدّل العناوين والوصف والأزرار التي تظهر للزوار.</p></div><button class="admin-button light save-all">حفظ المسودة</button></div><div id="contentGroups" class="content-groups"></div>
+      </section>
+      <section class="admin-view" id="view-appearance">
+        <div class="page-heading"><div><span class="admin-kicker">المظهر والأصول</span><h1>الهوية البصرية</h1><p>استبدل الشعار والبانر واضبط اللون الأساسي للموقع.</p></div><button class="admin-button light save-all">حفظ المسودة</button></div>
+        <section class="admin-card media-settings" id="mediaSettings"></section>
+        <section class="admin-card theme-card"><div class="card-heading"><div><h3>ألوان الهوية</h3><p>تظهر الألوان مباشرة في معاينة الموقع بعد الحفظ.</p></div></div><div id="themeSettings" class="theme-controls"></div></section>
+        <section class="admin-card section-switches"><div class="card-heading"><div><h3>أقسام الصفحة</h3><p>أخفِ أو أظهر الأقسام الرئيسية.</p></div></div><div id="sectionToggles" class="toggle-grid"></div></section>
+      </section>
+      <section class="admin-view" id="view-media">
+        <div class="page-heading"><div><span class="admin-kicker">محتوى بصري</span><h1>الفيديوهات ورسائل العملاء</h1><p>أضف الفيديوهات وروابط ملفاتها، ورتّب رسائل العملاء التي تظهر في الموقع.</p></div></div>
+        <section class="admin-card media-list-card"><div class="card-heading"><div><h3>فيديوهات المطعم</h3><p>استخدم مسار ملف داخل المشروع مثل assets/business-videos/video.mp4 أو رابط فيديو مباشر.</p></div><button class="admin-button primary" id="addVideo">＋ إضافة فيديو</button></div><div id="videosEditor" class="editable-media-list"></div></section>
+        <section class="admin-card media-list-card"><div class="card-heading"><div><h3>رسائل ومراجعات العملاء</h3><p>ترفع الصور بعد ضغطها تلقائيًا، وتُضمّن في ملف المحتوى المُصدّر.</p></div><button class="admin-button primary" id="addReview">＋ إضافة رسالة</button></div><div id="reviewsEditor" class="editable-media-list"></div></section>
+      </section>
+      <section class="admin-view" id="view-contact">
+        <div class="page-heading"><div><span class="admin-kicker">بيانات النشاط</span><h1>التواصل والروابط</h1><p>عدّل الهاتف وواتساب والعنوان والروابط الاجتماعية.</p></div><button class="admin-button light save-all">حفظ المسودة</button></div><div id="contactGroups" class="content-groups"></div>
+      </section>
+      <section class="admin-view" id="view-publishing">
+        <div class="page-heading"><div><span class="admin-kicker">النسخ والنشر</span><h1>حفظ نسخة الموقع</h1><p>جهّز نسخة المحتوى وانقلها إلى ملفات المشروع.</p></div></div>
+        <section class="admin-card publish-card"><div class="publish-icon">⇧</div><h2>التغييرات محفوظة في هذا المتصفح</h2><p>هذه اللوحة تعمل كأداة إدارة محلية مثل لوحة موقع المعلم. لتطبيق التغييرات على ملفات الموقع أو على جهاز آخر، صدّر ملف <code>content.js</code> ثم استبدل الملف الموجود في المجلد الرئيسي لموقع سمورة. يمكنك استيراد هذا الملف لاحقًا لمتابعة التحرير.</p><div class="publish-actions"><button class="admin-button primary" id="publishExport">تصدير ملف content.js</button><button class="admin-button light" id="publishImport">استيراد ملف محتوى</button></div><div class="publish-warning"><b>تنبيه للوصول:</b> لا يوجد خادم أو تسجيل دخول في هذه النسخة. إذا نُشر مجلد <code>admin</code> كما هو، فسيستطيع أي شخص يعرف رابطه فتح اللوحة. استخدمها محليًا، أو أضف حماية وصول على الخادم قبل نشرها للعامة.</div></section>
+        <section class="admin-card publish-details"><h3>طريقة تطبيق النسخة</h3><ol><li>اضغط «تصدير نسخة الموقع» لتنزيل <code>content.js</code>.</li><li>استبدل ملف <code>content.js</code> في المجلد الرئيسي للمشروع بالملف الجديد.</li><li>انشر مجلد الموقع بعد نقل ملف المحتوى إليه.</li><li>لتحميل نسخة قديمة للمتابعة، استورد ملف <code>content.js</code> أو ملف JSON محفوظًا.</li></ol><button class="text-action" id="resetDraft">استعادة محتوى البداية في هذه اللوحة</button></section>
+      </section>
+      <footer class="admin-footer"><a href="../index.html">← العودة إلى الموقع</a><span>سمورة • استوديو إدارة المحتوى</span></footer>
+    </main>
+  </div>
+  <dialog class="product-dialog" id="productDialog"><form id="productForm"><div class="dialog-heading"><div><span class="admin-kicker">بيانات المنيو</span><h2 id="productDialogTitle">إضافة صنف</h2></div><button type="button" class="dialog-close" id="closeProductDialog" aria-label="إغلاق">×</button></div><input type="hidden" name="id"><label>اسم الصنف<input class="admin-control" name="name" maxlength="120" required></label><div class="form-pair"><label>القسم<input class="admin-control" name="category" list="adminCategoryOptions" maxlength="60" required><datalist id="adminCategoryOptions"></datalist></label><label>السعر بالجنيه<input class="admin-control" name="price" type="number" min="0" step="1" required></label></div><label>الوصف والتفاصيل<textarea class="admin-control" name="note" rows="3" maxlength="400"></textarea></label><label>أيقونة توضيحية<input class="admin-control" name="icon" maxlength="8" value="🍽️"></label><div class="product-image-edit"><img id="productImagePreview" src="../assets/hero-grill.png" alt="معاينة صورة الصنف"><div><b>صورة الصنف</b><small>تُضغط الصورة وتُحفظ ضمن ملف المحتوى.</small><label class="file-button">اختيار صورة<input type="file" id="productImageFile" accept="image/*"></label><button type="button" class="text-action" id="clearProductImage">استعادة الصورة الأصلية</button></div></div><label class="check-control"><input type="checkbox" name="offer"><span>إظهار الصنف ضمن العروض</span></label><label class="check-control"><input type="checkbox" name="active" checked><span>ظاهر في الموقع</span></label><div class="dialog-actions"><button type="button" class="admin-button light" id="cancelProduct">إلغاء</button><button class="admin-button primary" type="submit">حفظ الصنف</button></div></form></dialog>
+  <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+  <script src="../content.js"></script><script src="../app.js"></script><script src="admin.js"></script>
+</body>
+</html>
